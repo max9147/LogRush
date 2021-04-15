@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,7 +11,12 @@ public class PlayerMovement : MonoBehaviour
     public GameObject loseScreen;
     public GameObject startPlatform;
     public GameObject UIControls;
-    public TextMeshProUGUI hpText;
+    public Animator animator;
+    public Image HP1;
+    public Image HP2;
+    public Image HP3;
+    public Sprite heartHalf;
+    public Sprite heartEmpty;
 
     private int hp = 6;
     private float curPos;
@@ -25,7 +31,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (touch.phase == TouchPhase.Began && !isJumping)
             {
-                transform.localScale = new Vector3(8, 8, 1);
+                animator.speed = 1 / logSpawner.GetComponent<LogSpawner>().GetSpawnDelay();
+                animator.SetTrigger("Jump");
                 isJumping = true;
                 StartCoroutine(Jump());
             }
@@ -70,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.CompareTag("Platform"))
         {
             safe = false;
-
             if (!onLog)
             {
                 TakeDamage();
@@ -81,16 +87,42 @@ public class PlayerMovement : MonoBehaviour
     private void TakeDamage()
     {
         hp--;
-        hpText.text = $"Жизни: {hp}";
 
         if (hp == 0)
         {
+            HP1.sprite = heartEmpty;
             Time.timeScale = 0;
             loseScreen.SetActive(true);
             UIControls.GetComponent<UIControls>().FinalScore();
         }
         else
         {
+            switch (hp)
+            {
+                case 1:
+                    HP1.sprite = heartHalf;
+                    break;
+
+                case 2:
+                    HP2.sprite = heartEmpty;
+                    break;
+
+                case 3:
+                    HP2.sprite = heartHalf;
+                    break;
+
+                case 4:
+                    HP3.sprite = heartEmpty;
+                    break;
+
+                case 5:
+                    HP3.sprite = heartHalf;
+                    break;
+
+                default:
+                    break;
+            }
+
             safe = true;
             onLog = false;
             GameObject[] toDestroy = GameObject.FindGameObjectsWithTag("Log");
@@ -106,7 +138,6 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator Jump()
     {
         yield return new WaitForSeconds(logSpawner.GetComponent<LogSpawner>().GetSpawnDelay() * 0.8f);
-        transform.localScale = new Vector3(5, 5, 1);
         if (!onLog && !safe)
         {
             TakeDamage();

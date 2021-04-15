@@ -11,7 +11,7 @@ public class ScoreSystem : MonoBehaviour
 
     public void AddScore()
     {
-        score++;
+        score += Mathf.RoundToInt(Mathf.Sqrt(GetComponent<TimeCount>().GetTimePassed()));
         scoreText.text = $"Очков: {score}";
     }
 

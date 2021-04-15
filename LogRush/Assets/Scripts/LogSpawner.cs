@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LogSpawner : MonoBehaviour
 {
-    public GameObject log;
+    public GameObject[] logs;
 
     private int delayStep = 0;
-    private float spawnDelay = 2f;
-    private float maxDelay = 5f;
+    private float spawnDelay = 1.5f;
+    private float maxDelay = 3f;
     private float logSpeed = 0.02f;
 
     private void Start()
@@ -23,7 +23,7 @@ public class LogSpawner : MonoBehaviour
         {
             delayStep = 0;
 
-            logSpeed += 0.002f;
+            logSpeed += 0.003f;
 
             if (spawnDelay < maxDelay)
             {
@@ -33,7 +33,7 @@ public class LogSpawner : MonoBehaviour
 
         yield return new WaitForSeconds(spawnDelay);
         Vector3 spawnPos = new Vector3(Random.Range(-0.4f, 0.4f), 1.9f, 0f);
-        Instantiate(log, spawnPos, Quaternion.identity).GetComponent<LogMovement>().SetSpeed(logSpeed);
+        Instantiate(logs[Random.Range(0, logs.Length)], spawnPos, Quaternion.identity).GetComponent<LogMovement>().SetSpeed(logSpeed);
         StartCoroutine("SpawnLog");
     }
 
