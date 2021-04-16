@@ -9,7 +9,7 @@ public class LogSpawner : MonoBehaviour
     private int delayStep = 0;
     private float spawnDelay = 1.5f;
     private float maxDelay = 3f;
-    private float logSpeed = 0.02f;
+    private float logSpeed = 0.018f;
 
     private void Start()
     {
@@ -19,15 +19,15 @@ public class LogSpawner : MonoBehaviour
     IEnumerator SpawnLog()
     {
         delayStep++;
-        if (delayStep == 10)
+        if (delayStep == 5)
         {
             delayStep = 0;
 
-            logSpeed += 0.003f;
+            logSpeed += 0.002f;
 
             if (spawnDelay < maxDelay)
             {
-                spawnDelay += 0.1f;
+                spawnDelay += 0.05f;
             }
         }
 

@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private bool onLog = false;
     private bool safe = true;
     private Touch touch;
+    private GameObject log;
 
     private void Update()
     {
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (touch.phase == TouchPhase.Began && !isJumping)
             {
-                animator.speed = 1 / logSpawner.GetComponent<LogSpawner>().GetSpawnDelay();
+                animator.speed = 1 / logSpawner.GetComponent<LogSpawner>().GetSpawnDelay() * 1.2f;
                 animator.SetTrigger("Jump");
                 isJumping = true;
                 StartCoroutine(Jump());
@@ -60,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.CompareTag("Log"))
         {
             onLog = true;
+            log = collision.gameObject;
         }
     }
 
@@ -67,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.transform.CompareTag("Log"))
         {
+            collision.GetComponent<Animator>().SetTrigger("LogMove");
+
             if (!isJumping && !safe)
             {
                 TakeDamage();
@@ -141,6 +145,10 @@ public class PlayerMovement : MonoBehaviour
         if (!onLog && !safe)
         {
             TakeDamage();
+        }
+        if (onLog)
+        {
+            log.GetComponentInChildren<ParticleSystem>().Play();
         }
         isJumping = false;
     }

@@ -16,7 +16,7 @@ public class LogMovement : MonoBehaviour
 
             if (transform.position.y >= 2.4f)
             {
-                GetComponent<SpriteRenderer>().sortingOrder = 3;
+                GetComponent<SpriteRenderer>().sortingOrder = 4;
                 targetPos = new Vector3(Random.Range(-2f, 2f), -8f, 0f);
                 ready = true;
             }
